@@ -1,0 +1,2353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="carbon">
+  <title>Evaluación Técnica y Seguridad Eléctrica Fotovoltaica | INVEA SAS</title>
+  
+  <!-- IBM Plex Sans & IBM Plex Mono Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons (Approved CDN) -->
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    /* Carbon Design System Tokens */
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces */
+      --background: #ffffff;
+      --surface-container-low: #f4f4f4;
+      --surface-container: #f4f4f4;
+      --surface-container-high: #e0e0e0;
+
+      /* Ink */
+      --on-surface: #161616;
+      --on-surface-variant: #525252;
+
+      /* Rules */
+      --outline: #8d8d8d;
+      --outline-variant: #e0e0e0;
+
+      /* Accents */
+      --primary: #0f62fe;
+      --on-primary: #ffffff;
+      --primary-container: #d0e2ff;
+      --on-primary-container: #161616;
+      --secondary: #6f6f6f;
+      --tertiary: #198038;
+      --error: #da1e28;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #0f62fe;
+      --data-2: #6929c4;
+      --data-3: #005d5d;
+      --data-4: #9f1853;
+      --data-context: #8d8d8d;
+
+      /* Fonts */
+      --font-headline: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-label: 'IBM Plex Mono', monospace;
+
+      /* Shape */
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      /* Effects */
+      --shadow-1: 0 2px 6px rgb(0 0 0 / 0.1);
+      --shadow-2: 0 4px 12px rgb(0 0 0 / 0.12);
+      --rule: 1px solid var(--outline-variant);
+      --field-rule: 1px solid var(--outline);
+      --indicator: 2px solid var(--primary);
+
+      /* Shared tokens */
+      --positive: #198038;
+      --warning: #b28600;
+      --warning-container: #fdf3d9;
+      --focus: #0f62fe;
+
+      /* Spacing */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Type Scale (Focused Tool) */
+      --display-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.15vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+
+      /* Conductor Specific Colors */
+      --cable-red: #da1e28;
+      --cable-black: #161616;
+      --cable-white: #ffffff;
+      --cable-yellow: #f1c21b;
+      --cable-blue: #0f62fe;
+      --cable-green: #198038;
+
+      /* Additional Semantic & Component Tokens */
+      --success-container: #defbe6;
+      --on-success-container: #0e6027;
+      --success-border: #198038;
+      --feedback-success-bg: #edf9f0;
+      --error-container: #fff1f1;
+      --on-error-container: #a2191f;
+      --error-border: #da1e28;
+      --feedback-error-bg: #fff8f8;
+      --primary-hover: #0353e9;
+      --gold-dark: #b28600;
+      --cert-border-inner: #c6c6c6;
+      --watermark-color: rgba(15, 98, 254, 0.04);
+    }
+
+    /* Base Reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header { position: static !important; }
+
+    /* Accessibility Focus */
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Page Layout */
+    .app-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--background);
+    }
+
+    /* Top Utility Bar */
+    .top-bar {
+      border-bottom: var(--rule);
+      background-color: var(--surface-container-low);
+      padding: var(--space-sm) var(--space-lg);
+      font-size: var(--label-size);
+      font-family: var(--font-label);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .top-bar-company {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-weight: 600;
+      color: var(--on-surface);
+    }
+
+    .badge-nit {
+      background-color: var(--surface-container-high);
+      color: var(--on-surface-variant);
+      padding: 0.15rem 0.4rem;
+      border-radius: var(--rounded);
+      font-size: 0.7rem;
+    }
+
+    .top-bar-status {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      color: var(--on-surface-variant);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--rounded-full);
+      font-size: 0.7rem;
+      background-color: var(--success-container);
+      color: var(--on-success-container);
+      font-weight: 500;
+    }
+
+    /* Main Container */
+    .main-container {
+      flex: 1;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: var(--space-xl) var(--space-lg);
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      font-family: var(--font-headline);
+      color: var(--on-surface);
+      margin: 0;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    h1 { font-size: var(--display-size); }
+    h2 { font-size: var(--headline-size); }
+    h3 { font-size: var(--subhead-size); }
+
+    .text-mono {
+      font-family: var(--font-label);
+    }
+
+    .text-muted {
+      color: var(--on-surface-variant);
+    }
+
+    .label-badge {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--rounded);
+      background-color: var(--surface-container-high);
+      color: var(--on-surface-variant);
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .label-badge-primary {
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+      font-weight: 600;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 48px;
+      padding: 0 var(--space-lg);
+      font-family: var(--font-headline);
+      font-size: var(--body-size);
+      font-weight: 500;
+      text-decoration: none;
+      border: 1px solid transparent;
+      border-radius: var(--rounded);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--on-surface);
+      border: 1px solid var(--outline);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background-color: var(--surface-container-high);
+    }
+
+    .btn:disabled {
+      background-color: var(--surface-container-high);
+      color: var(--secondary);
+      border-color: var(--outline-variant);
+      cursor: not-allowed;
+    }
+
+    /* Form Inputs */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-md);
+    }
+
+    .form-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface);
+      font-weight: 600;
+    }
+
+    .form-input, .form-select {
+      height: 48px;
+      padding: 0 var(--space-md);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      background-color: var(--surface-container-low);
+      border: none;
+      border-bottom: var(--field-rule);
+      border-radius: var(--rounded) var(--rounded) 0 0;
+      color: var(--on-surface);
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-micro) var(--ease-out);
+    }
+
+    .form-input:focus, .form-select:focus {
+      background-color: var(--surface-container-high);
+      border-bottom: 2px solid var(--primary);
+      outline: none;
+    }
+
+    .form-helper {
+      font-size: 0.8rem;
+      color: var(--on-surface-variant);
+      margin-top: 0.2rem;
+    }
+
+    /* Card Panels */
+    .carbon-card {
+      background-color: var(--surface-container-low);
+      border: var(--rule);
+      padding: var(--space-xl);
+      border-radius: var(--rounded);
+      margin-bottom: var(--space-lg);
+    }
+
+    /* Screen Views */
+    .screen-view {
+      display: none;
+    }
+
+    .screen-view.active {
+      display: block;
+    }
+
+    /* Welcome / Registration Screen */
+    .welcome-header {
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-lg);
+      margin-bottom: var(--space-xl);
+    }
+
+    .module-overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+
+    .module-tile {
+      background-color: var(--background);
+      border: var(--rule);
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      border-bottom: 3px solid var(--outline);
+      transition: border-color var(--dur-micro) var(--ease-out);
+    }
+
+    .module-tile:hover {
+      border-bottom-color: var(--primary);
+    }
+
+    .module-tile-num {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: var(--space-xs);
+    }
+
+    .module-tile-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: var(--space-xs);
+    }
+
+    .module-tile-desc {
+      font-size: 0.85rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* Quiz Screen Components */
+    .quiz-progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background-color: var(--surface-container-high);
+      margin-bottom: var(--space-lg);
+      position: relative;
+    }
+
+    .quiz-progress-bar {
+      height: 100%;
+      background-color: var(--primary);
+      width: 0%;
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    .progress-threshold-marker {
+      position: absolute;
+      top: -3px;
+      left: 85%;
+      width: 2px;
+      height: 12px;
+      background-color: var(--tertiary);
+      z-index: 2;
+    }
+
+    .progress-threshold-label {
+      position: absolute;
+      top: -20px;
+      left: 85%;
+      transform: translateX(-50%);
+      font-family: var(--font-label);
+      font-size: 0.65rem;
+      color: var(--tertiary);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .quiz-nav-status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+
+    .question-card {
+      background-color: var(--background);
+      border: var(--rule);
+      padding: var(--space-xl);
+      border-radius: var(--rounded);
+      box-shadow: var(--shadow-1);
+    }
+
+    .question-header {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+
+    .question-number-pill {
+      background-color: var(--on-surface);
+      color: var(--background);
+      font-family: var(--font-label);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--rounded);
+      flex-shrink: 0;
+    }
+
+    .question-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--on-surface);
+    }
+
+    /* Visual Diagram / Schematic Area */
+    .diagram-panel {
+      background-color: var(--surface-container-low);
+      border: var(--rule);
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      margin-bottom: var(--space-lg);
+      overflow-x: auto;
+    }
+
+    .diagram-header {
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    /* Option choices */
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
+    }
+
+    .option-button {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      background-color: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.45;
+      color: var(--on-surface);
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-micro) var(--ease-out),
+                  transform var(--dur-micro) var(--ease-out);
+      width: 100%;
+    }
+
+    .option-button:hover:not(:disabled) {
+      background-color: var(--surface-container-high);
+      border-color: var(--primary);
+    }
+
+    .option-letter {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.85rem;
+      background-color: var(--background);
+      border: 1px solid var(--outline);
+      width: 28px;
+      height: 28px;
+      border-radius: var(--rounded);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Option states after selection */
+    .option-button.correct {
+      background-color: #defbe6 !important;
+      border-color: var(--tertiary) !important;
+      color: #0e6027 !important;
+    }
+
+    .option-button.correct .option-letter {
+      background-color: var(--tertiary);
+      color: #ffffff;
+      border-color: var(--tertiary);
+    }
+
+    .option-button.incorrect {
+      background-color: #fff1f1 !important;
+      border-color: var(--error) !important;
+      color: #a2191f !important;
+    }
+
+    .option-button.incorrect .option-letter {
+      background-color: var(--error);
+      color: #ffffff;
+      border-color: var(--error);
+    }
+
+    .option-button.dimmed {
+      opacity: 0.55;
+      cursor: default;
+    }
+
+    /* Feedback Box */
+    .feedback-box {
+      margin-top: var(--space-lg);
+      padding: var(--space-lg);
+      border-radius: var(--rounded);
+      border-left: 4px solid var(--primary);
+      display: none;
+      animation: fadeIn var(--dur-short) var(--ease-out);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .feedback-box.correct {
+      display: block;
+      background-color: #edf9f0;
+      border-left-color: var(--tertiary);
+    }
+
+    .feedback-box.incorrect {
+      display: block;
+      background-color: #fff8f8;
+      border-left-color: var(--error);
+    }
+
+    .feedback-status-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: var(--space-xs);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .feedback-status-title.correct { color: #0e6027; }
+    .feedback-status-title.incorrect { color: #a2191f; }
+
+    .feedback-text {
+      font-size: 0.95rem;
+      color: var(--on-surface);
+      margin-bottom: var(--space-md);
+      line-height: 1.5;
+    }
+
+    .norm-citation {
+      background-color: var(--background);
+      border: var(--rule);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-md);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+    }
+
+    /* Results Screen */
+    .results-hero-card {
+      background-color: var(--surface-container-low);
+      border: var(--rule);
+      border-radius: var(--rounded);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: var(--space-xl);
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .results-hero-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    .score-circle-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .score-percentage-display {
+      font-family: var(--font-label);
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--on-surface);
+      margin-bottom: var(--space-xs);
+    }
+
+    .score-ratio-display {
+      font-family: var(--font-label);
+      font-size: 0.95rem;
+      color: var(--on-surface-variant);
+    }
+
+    .approval-banner {
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--rounded);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+
+    .approval-banner.approved {
+      background-color: #defbe6;
+      color: #0e6027;
+      border: 1px solid #198038;
+    }
+
+    .approval-banner.failed {
+      background-color: #fff1f1;
+      color: #a2191f;
+      border: 1px solid #da1e28;
+    }
+
+    .modules-breakdown-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+
+    .module-result-card {
+      background-color: var(--background);
+      border: var(--rule);
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+    }
+
+    .module-result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: var(--space-xs);
+    }
+
+    .module-result-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .module-result-score {
+      font-family: var(--font-label);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .module-result-bar-bg {
+      height: 6px;
+      background-color: var(--surface-container-high);
+      border-radius: var(--rounded);
+      overflow: hidden;
+      margin: var(--space-xs) 0 var(--space-sm) 0;
+    }
+
+    .module-result-bar-fill {
+      height: 100%;
+      background-color: var(--primary);
+    }
+
+    .module-result-feedback {
+      font-size: 0.8rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* Certificate Section */
+    .certificate-container {
+      background: #ffffff;
+      border: 2px solid #161616;
+      padding: var(--space-2xl);
+      border-radius: var(--rounded);
+      margin: var(--space-xl) 0;
+      position: relative;
+      box-shadow: var(--shadow-2);
+    }
+
+    .certificate-inner-border {
+      border: 1px solid #c6c6c6;
+      padding: var(--space-xl);
+      position: relative;
+    }
+
+    .cert-watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-label);
+      font-size: 5rem;
+      font-weight: 800;
+      color: rgba(15, 98, 254, 0.03);
+      pointer-events: none;
+      white-space: nowrap;
+      user-select: none;
+      z-index: 0;
+    }
+
+    .cert-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid var(--on-surface);
+      padding-bottom: var(--space-md);
+      margin-bottom: var(--space-lg);
+      position: relative;
+      z-index: 1;
+    }
+
+    .cert-company-block h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #161616;
+    }
+
+    .cert-company-block p {
+      font-family: var(--font-label);
+      font-size: 0.8rem;
+      color: var(--on-surface-variant);
+      margin: 0.2rem 0 0 0;
+    }
+
+    .cert-badge-stamp {
+      border: 2px solid #0f62fe;
+      color: #0f62fe;
+      padding: 0.4rem 0.8rem;
+      border-radius: var(--rounded);
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-align: center;
+    }
+
+    .cert-body {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      padding: var(--space-md) 0;
+    }
+
+    .cert-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #161616;
+      margin-bottom: var(--space-xs);
+    }
+
+    .cert-subtitle {
+      font-family: var(--font-label);
+      font-size: 0.85rem;
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-lg);
+    }
+
+    .cert-worker-name {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #0f62fe;
+      border-bottom: 2px solid var(--surface-container-high);
+      display: inline-block;
+      padding: 0 var(--space-xl) var(--space-xs) var(--space-xl);
+      margin-bottom: var(--space-sm);
+    }
+
+    .cert-worker-meta {
+      font-family: var(--font-label);
+      font-size: 0.95rem;
+      color: var(--on-surface);
+      margin-bottom: var(--space-lg);
+    }
+
+    .cert-statement {
+      max-width: 680px;
+      margin: 0 auto var(--space-xl) auto;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--on-surface-variant);
+    }
+
+    .cert-details-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+      max-width: 720px;
+      margin: 0 auto var(--space-xl) auto;
+      background-color: var(--surface-container-low);
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      border: var(--rule);
+      text-align: left;
+    }
+
+    .cert-detail-item-label {
+      font-family: var(--font-label);
+      font-size: 0.7rem;
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+    }
+
+    .cert-detail-item-value {
+      font-family: var(--font-label);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+
+    .cert-signatures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2xl);
+      margin-top: var(--space-2xl);
+      padding-top: var(--space-md);
+      position: relative;
+      z-index: 1;
+    }
+
+    .cert-sig-block {
+      text-align: center;
+      padding-top: var(--space-sm);
+      border-top: 1px solid #161616;
+    }
+
+    .cert-sig-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .cert-sig-title {
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* Detailed Answers Review Section */
+    .review-accordion-item {
+      border: var(--rule);
+      border-radius: var(--rounded);
+      margin-bottom: var(--space-sm);
+      background-color: var(--background);
+      overflow: hidden;
+    }
+
+    .review-accordion-header {
+      padding: var(--space-md) var(--space-lg);
+      background-color: var(--surface-container-low);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .review-accordion-header:hover {
+      background-color: var(--surface-container-high);
+    }
+
+    .review-accordion-body {
+      padding: var(--space-lg);
+      border-top: var(--rule);
+      display: none;
+    }
+
+    .review-accordion-body.open {
+      display: block;
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+
+      .top-bar, .quiz-progress-bar-container, .btn,
+      .results-hero-card, .modules-breakdown-grid, #review-section,
+      .no-print, header, footer {
+        display: none !important;
+      }
+
+      .main-container {
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+
+      .certificate-container {
+        border: 2px solid #000000 !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 20mm !important;
+        page-break-inside: avoid;
+      }
+
+      .certificate-inner-border {
+        border: 1px solid #555555 !important;
+        padding: 15mm !important;
+      }
+    }
+
+    /* Responsiveness */
+    @media (max-width: 640px) {
+      .main-container {
+        padding: var(--space-md);
+      }
+
+      .question-card {
+        padding: var(--space-md);
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .cert-signatures {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+      }
+
+      .cert-details-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-wrapper">
+    <!-- Top Utility Branding Bar -->
+    <header class="top-bar no-print" aria-label="Encabezado institucional">
+      <div class="top-bar-company">
+        <i data-lucide="zap" style="color: var(--primary); width: 16px; height: 16px;" aria-hidden="true"></i>
+        <span>INVEA SAS</span>
+        <span class="badge-nit">NIT: 900519295-1</span>
+      </div>
+      <div class="top-bar-status">
+        <span class="status-pill">
+          <i data-lucide="shield-check" style="width: 12px; height: 12px;" aria-hidden="true"></i>
+          Normativa RETIE • NTC 2050 • IEC 62446
+        </span>
+        <span id="top-user-pill" class="text-mono" style="display: none;"></span>
+      </div>
+    </header>
+
+    <main class="main-container">
+
+      <!-- ========================================== -->
+      <!-- PANTALLA 1: BIENVENIDA Y REGISTRO TRABAJADOR -->
+      <!-- ========================================== -->
+      <section id="screen-welcome" class="screen-view active" aria-labelledby="welcome-title">
+        <div class="welcome-header">
+          <div class="label-badge label-badge-primary" style="margin-bottom: var(--space-sm);">SISTEMA DE HABILITACIÓN TÉCNICA OPERATIVA</div>
+          <h1 id="welcome-title" style="margin-bottom: var(--space-sm);">Evaluación de Competencia en Seguridad Eléctrica y Montaje Solar</h1>
+          <p class="text-muted" style="max-width: 75ch; font-size: 1.05rem;">
+            Instrumento de verificación obligatoria para personal técnico y operativo de <strong>INVEA SAS (NIT 900519295-1)</strong>. Esta evaluación garantiza el entendimiento riguroso del código de conductores, torques normados, procedimientos ante ausencia de mando y mitigación de arco en corriente continua.
+          </p>
+        </div>
+
+        <!-- 4 Modules Overview Cards -->
+        <h2 style="font-size: 1.15rem; margin-bottom: var(--space-md);">Estructura de la Evaluación (15 Preguntas Técnicas)</h2>
+        <div class="module-overview-grid">
+          <div class="module-tile">
+            <div class="module-tile-num">MÓDULO 1</div>
+            <div class="module-tile-title">Código de Colores DC & AC/PE</div>
+            <div class="module-tile-desc">Identificación unívoca de conductores DC (+ Rojo / - Negro), fases RETIE AC 208/120V, neutro blanco y tierra PE verde/amarillo.</div>
+          </div>
+          <div class="module-tile">
+            <div class="module-tile-num">MÓDULO 2</div>
+            <div class="module-tile-title">Par de Apriete & Torque</div>
+            <div class="module-tile-desc">Embocadura manual previa para prevenir trasroscado, uso de torquímetro calibrado, laca testigo y terminales bimetálicos.</div>
+          </div>
+          <div class="module-tile">
+            <div class="module-tile-num">MÓDULO 3</div>
+            <div class="module-tile-title">Línea de Mando & Pre-energización</div>
+            <div class="module-tile-desc">Protocolo de STOP WORK ante ausencia del supervisor, 5 Reglas de Oro RETIE y comprobación de Voc y polaridad antes de conectar.</div>
+          </div>
+          <div class="module-tile">
+            <div class="module-tile-num">MÓDULO 4</div>
+            <div class="module-tile-title">EPP Dieléctrico & Arco Eléctrico</div>
+            <div class="module-tile-desc">Naturaleza persistente del arco DC (sin cruce por cero), prohibición de desconexión MC4 bajo carga y EPP normado NFPA 70E.</div>
+          </div>
+        </div>
+
+        <!-- Registration Form Card -->
+        <div class="carbon-card">
+          <div style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <i data-lucide="user-check" style="color: var(--primary);" aria-hidden="true"></i>
+            <h2 style="font-size: 1.25rem;">Registro Obligatorio del Trabajador</h2>
+          </div>
+          <p class="text-muted" style="margin-bottom: var(--space-lg); font-size: 0.9rem;">
+            Ingrese sus datos oficiales tal como figuran en su documento de identidad. Estos datos serán transferidos al <strong>Certificado y Acta de Registro Oficial</strong> emitido por INVEA SAS al alcanzar el puntaje mínimo exigido del <strong>85% (13/15 aciertos)</strong>.
+          </p>
+
+          <form id="registration-form" onsubmit="handleStartExam(event)">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md);">
+              <div class="form-group">
+                <label for="worker-name" class="form-label">Nombre Completo del Trabajador *</label>
+                <input type="text" id="worker-name" class="form-input" placeholder="Ej: Carlos Alberto Restrepo Gómez" required autocomplete="name">
+                <span class="form-helper">Nombres y apellidos completos</span>
+              </div>
+
+              <div class="form-group">
+                <label for="worker-doc" class="form-label">Cédula de Ciudadanía (C.C.) *</label>
+                <input type="text" id="worker-doc" class="form-input" placeholder="Ej: 1020456789" required pattern="[0-9]{6,12}" inputmode="numeric">
+                <span class="form-helper">Documento de identidad nacional (solo dígitos)</span>
+              </div>
+
+              <div class="form-group" style="grid-column: 1 / -1;">
+                <label for="worker-role" class="form-label">Cargo u Oficio en Obra *</label>
+                <select id="worker-role" class="form-select" required>
+                  <option value="" disabled selected>Seleccione el rol técnico asignado en obra...</option>
+                  <option value="Técnico Electricista de Montaje Solar">Técnico Electricista de Montaje Solar</option>
+                  <option value="Ayudante Técnico Electricista">Ayudante Técnico Electricista</option>
+                  <option value="Operario de Montaje Estructural y Fotovoltaico">Operario de Montaje Estructural y Fotovoltaico</option>
+                  <option value="Técnico de Conexiones y Comisionamiento">Técnico de Conexiones y Comisionamiento</option>
+                  <option value="Supervisor Eléctrico / Residente de Obra">Supervisor Eléctrico / Residente de Obra</option>
+                  <option value="Coordinador de Seguridad SST / HSEQ">Coordinador de Seguridad SST / HSEQ</option>
+                  <option value="Liniero / Empalmador de Media Tensión">Liniero / Empalmador de Media Tensión</option>
+                </select>
+                <span class="form-helper">Especialidad para la acreditación técnica</span>
+              </div>
+            </div>
+
+            <div style="margin: var(--space-md) 0 var(--space-lg) 0; display: flex; align-items: flex-start; gap: var(--space-sm);">
+              <input type="checkbox" id="worker-consent" required style="margin-top: 4px; accent-color: var(--primary); width: 18px; height: 18px;">
+              <label for="worker-consent" style="font-size: 0.85rem; color: var(--on-surface-variant); cursor: pointer;">
+                Certifico que comprendo las directrices de seguridad de <strong>INVEA SAS</strong> y responderé de forma individual y responsable esta evaluación técnica.
+              </label>
+            </div>
+
+            <div id="registration-error" style="display: none; padding: var(--space-md); background-color: #fff1f1; border-left: 4px solid var(--error); color: #a2191f; font-size: 0.9rem; margin-bottom: var(--space-md);">
+              Por favor complete todos los campos obligatorios correctamente antes de continuar.
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="min-width: 240px;">
+              <i data-lucide="play" style="width: 16px; height: 16px;" aria-hidden="true"></i>
+              Comenzar Evaluación Técnica (15 Preguntas)
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- PANTALLA 2: CUESTIONARIO INTERACTIVO (15Q) -->
+      <!-- ========================================== -->
+      <section id="screen-quiz" class="screen-view" aria-labelledby="quiz-module-label">
+        
+        <!-- Progress Bar Tracker -->
+        <div class="quiz-progress-bar-container" title="Progreso del Examen">
+          <div id="quiz-progress-fill" class="quiz-progress-bar"></div>
+          <div class="progress-threshold-marker" title="Umbral de Aprobación Mínimo: 85%"></div>
+          <div class="progress-threshold-label">85% APROBACIÓN</div>
+        </div>
+
+        <!-- Navigation Status Bar -->
+        <div class="quiz-nav-status">
+          <div style="display: flex; align-items: center; gap: var(--space-sm);">
+            <span id="quiz-module-label" class="label-badge label-badge-primary">MÓDULO 1: CÓDIGO DE COLORES</span>
+            <span id="quiz-question-counter" class="text-mono" style="font-weight: 600; color: var(--on-surface);">Pregunta 1 de 15</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: var(--space-md);">
+            <span class="text-mono" id="quiz-worker-tag" style="color: var(--on-surface-variant);"></span>
+            <span class="text-mono" id="quiz-score-live" style="background-color: var(--surface-container-high); padding: 0.15rem 0.5rem; border-radius: var(--rounded);">
+              Puntaje: 0 / 15
+            </span>
+          </div>
+        </div>
+
+        <!-- Main Question Card -->
+        <div class="question-card">
+          <div class="question-header">
+            <div id="question-number-badge" class="question-number-pill">01</div>
+            <div>
+              <div id="question-category-tag" class="text-mono" style="font-size: 0.75rem; color: var(--primary); text-transform: uppercase; font-weight: 600; margin-bottom: 0.2rem;">
+                IDENTIFICACIÓN DE POLARIDAD Y CONDUCTORES
+              </div>
+              <h2 id="question-text" class="question-title">
+                Cargando enunciado de la pregunta...
+              </h2>
+            </div>
+          </div>
+
+          <!-- Dynamic Visual Diagram Container (for questions requiring visual diagrams) -->
+          <div id="diagram-container" class="diagram-panel" style="display: none;">
+            <!-- Injected via JavaScript for specific questions -->
+          </div>
+
+          <!-- Multiple Choice Options Grid -->
+          <div id="options-container" class="options-grid" role="radiogroup" aria-labelledby="question-text">
+            <!-- Dynamically populated options -->
+          </div>
+
+          <!-- Interactive Formative Feedback Box -->
+          <div id="feedback-panel" class="feedback-box">
+            <div id="feedback-status-title" class="feedback-status-title">
+              <!-- Result Icon & Title -->
+            </div>
+            <div id="feedback-body" class="feedback-text">
+              <!-- Technical Justification -->
+            </div>
+            <div id="feedback-norm" class="norm-citation">
+              <i data-lucide="book-open" style="width: 14px; height: 14px; flex-shrink: 0; margin-top: 2px;" aria-hidden="true"></i>
+              <span id="feedback-norm-text">Fundamento normativo legal</span>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: var(--space-md);">
+              <button id="btn-next-question" class="btn btn-primary" onclick="handleNextQuestion()">
+                Siguiente Pregunta
+                <i data-lucide="arrow-right" style="width: 16px; height: 16px;" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- PANTALLA 3: RESULTADOS Y CERTIFICACIÓN      -->
+      <!-- ========================================== -->
+      <section id="screen-results" class="screen-view" aria-labelledby="results-title">
+        
+        <div style="border-bottom: var(--rule); padding-bottom: var(--space-md); margin-bottom: var(--space-xl);">
+          <div class="label-badge label-badge-primary" style="margin-bottom: var(--space-xs);">DICTAMEN TÉCNICO FINAL</div>
+          <h1 id="results-title">Resultados de Evaluación de Competencia</h1>
+          <p class="text-muted" style="margin-top: var(--space-xs);">
+            Registro generado por el Sistema de Gestión HSEQ de <strong>INVEA SAS</strong>.
+          </p>
+        </div>
+
+        <!-- Hero Score Card -->
+        <div class="results-hero-card">
+          <div class="score-circle-wrapper">
+            <div id="final-percentage" class="score-percentage-display">0%</div>
+            <div id="final-ratio" class="score-ratio-display">0 de 15 Aciertos</div>
+            <div id="approval-pill" class="approval-banner">
+              <!-- Injected based on score >= 85% -->
+            </div>
+          </div>
+
+          <div>
+            <h2 id="result-status-heading" style="font-size: 1.35rem; margin-bottom: var(--space-xs);">
+              Evaluación Finalizada
+            </h2>
+            <p id="result-status-desc" class="text-muted" style="margin-bottom: var(--space-md); font-size: 0.95rem;">
+              Calculando desglose de competencia y cumplimiento normativo...
+            </p>
+
+            <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap;">
+              <button id="btn-print-cert" class="btn btn-primary" onclick="handlePrintCertificate()">
+                <i data-lucide="printer" style="width: 16px; height: 16px;" aria-hidden="true"></i>
+                Descargar / Imprimir Certificado Digital
+              </button>
+              <button id="btn-toggle-review" class="btn btn-secondary" onclick="toggleReviewSection()">
+                <i data-lucide="list-checks" style="width: 16px; height: 16px;" aria-hidden="true"></i>
+                Revisar Detalle de las 15 Preguntas
+              </button>
+              <button id="btn-retry" class="btn btn-secondary" onclick="handleRestartEvaluation()">
+                <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;" aria-hidden="true"></i>
+                Repetir Evaluación
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modules Diagnostics Breakdown -->
+        <h2 style="font-size: 1.15rem; margin-bottom: var(--space-md);">Diagnóstico de Competencia por Módulo</h2>
+        <div id="modules-breakdown-container" class="modules-breakdown-grid">
+          <!-- Injected via JavaScript -->
+        </div>
+
+        <!-- Printable Official Digital Certificate -->
+        <div id="certificate-wrapper" class="certificate-container" aria-label="Certificado de Acreditación Oficial">
+          <div class="certificate-inner-border">
+            <div class="cert-watermark">INVEA SAS</div>
+
+            <div class="cert-header">
+              <div class="cert-company-block">
+                <h2>INVEA SAS</h2>
+                <p>NIT: 900519295-1 • Dirección de Operaciones & HSEQ</p>
+                <p style="font-size: 0.72rem; color: var(--on-surface-variant);">Certificación en Generación Fotovoltaica y Seguridad Eléctrica</p>
+              </div>
+              <div style="text-align: right;">
+                <div class="cert-badge-stamp">ACREDITACIÓN RETIE</div>
+                <div id="cert-folio" class="text-mono" style="font-size: 0.7rem; color: var(--on-surface-variant); margin-top: 0.3rem;">
+                  FOLIO: INV-PV-2026-CC000000
+                </div>
+              </div>
+            </div>
+
+            <div class="cert-body">
+              <div class="cert-title">CONSTANCIA OFICIAL DE COMPETENCIA TÉCNICA</div>
+              <div class="cert-subtitle">SISTEMA INTEGRADO DE SEGURIDAD ELÉCTRICA (RETIE / NTC 2050 / IEC 62446)</div>
+
+              <div style="margin: var(--space-md) 0;">
+                <span style="font-size: 0.9rem; color: var(--on-surface-variant); display: block;">Se hace constar que el trabajador(a):</span>
+                <div id="cert-worker-name-display" class="cert-worker-name">NOMBRE DEL TRABAJADOR</div>
+                <div id="cert-worker-meta-display" class="cert-worker-meta">C.C. 0.000.000 • CARGO EN OBRA</div>
+              </div>
+
+              <p class="cert-statement">
+                Ha presentado y aprobado satisfactoriamente la evaluación técnico-operativa sobre <strong>código de conductores DC y AC/PE bajo RETIE</strong>, protocolos de <strong>par de apriete / torque controlado</strong> con embocado manual previo, <strong>línea de mando y política de parada segura (Stop Work)</strong> ante ausencia del supervisor, y <strong>prevención de arcos eléctricos en corriente continua con EPP dieléctrico</strong> normado para la ejecución de proyectos solares fotovoltaicos de INVEA SAS.
+              </p>
+
+              <div class="cert-details-grid">
+                <div>
+                  <div class="cert-detail-item-label">FECHA DE EMISIÓN</div>
+                  <div id="cert-date-display" class="cert-detail-item-value">06/11/2026</div>
+                </div>
+                <div>
+                  <div class="cert-detail-item-label">CALIFICACIÓN FINAL</div>
+                  <div id="cert-score-display" class="cert-detail-item-value">0% (0/15)</div>
+                </div>
+                <div>
+                  <div class="cert-detail-item-label">ESTADO DE ACREDITACIÓN</div>
+                  <div id="cert-status-display" class="cert-detail-item-value" style="color: var(--tertiary);">HABILITADO EN OBRA</div>
+                </div>
+              </div>
+
+              <div class="cert-signatures">
+                <div class="cert-sig-block">
+                  <div id="cert-sig-worker-name" class="cert-sig-name">Firma del Trabajador Evaluado</div>
+                  <div id="cert-sig-worker-doc" class="cert-sig-title">C.C. Documento Nacional</div>
+                </div>
+                <div class="cert-sig-block">
+                  <div class="cert-sig-name">Ingeniero Residente / Coord. HSEQ</div>
+                  <div class="cert-sig-title">INVEA SAS • Matrícula Profesional Vigente</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Collapsible Detailed Review Section -->
+        <section id="review-section" style="display: none; margin-top: var(--space-2xl);">
+          <div style="border-bottom: var(--rule); padding-bottom: var(--space-sm); margin-bottom: var(--space-lg);">
+            <h2>Auditoría de Respuestas y Justificaciones Técnicas</h2>
+            <p class="text-muted" style="font-size: 0.9rem;">
+              Revise las 15 preguntas con sus fundamentos normativos aplicables en obra según RETIE y NTC 2050.
+            </p>
+          </div>
+          <div id="review-accordion-list">
+            <!-- Populated dynamically -->
+          </div>
+        </section>
+
+      </section>
+
+    </main>
+
+    <footer class="no-print" style="border-top: var(--rule); background-color: var(--surface-container-low); padding: var(--space-md) var(--space-lg); font-size: 0.8rem; color: var(--on-surface-variant); text-align: center;">
+      INVEA SAS — NIT: 900519295-1 • Sistema de Aseguramiento de Calidad Operativa y Seguridad Eléctrica RETIE 2026
+    </footer>
+  </div>
+
+  <!-- Notebook Shim API Container -->
+  <api-shim></api-shim>
+
+  <script>
+    /**
+     * INVEA SAS - Evaluador Técnico y de Seguridad Eléctrica Fotovoltaica
+     * Estructurado en 4 módulos y 15 preguntas fundamentadas en RETIE, NTC 2050 e IEC.
+     */
+
+    // 15 Comprehensive Questions Data Array
+    const QUIZ_QUESTIONS = [
+      // ==========================================
+      // MÓDULO 1: CÓDIGO DE COLORES (DC & AC/PE)
+      // ==========================================
+      {
+        id: 1,
+        moduleId: 1,
+        moduleName: "MÓDULO 1: CÓDIGO DE COLORES (DC Y AC/PE)",
+        category: "POLARIDAD EN CORRIENTE CONTINUA (DC)",
+        question: "En las instalaciones fotovoltaicas en corriente continua (DC), ¿cuál es el código de colores estricto que se debe emplear para identificar la polaridad en los strings, cajas de agrupación (combiner boxes) y entradas al inversor solar?",
+        diagramType: "dc-cables",
+        options: [
+          { text: "Positivo: Conductor ROJO (+) | Negativo: Conductor NEGRO (-) | Puesta a Tierra (PE): VERDE o VERDE/AMARILLO", correct: true },
+          { text: "Positivo: Conductor NEGRO (+) | Negativo: Conductor BLANCO (-) | Puesta a Tierra (PE): AZUL", correct: false },
+          { text: "Positivo: Conductor AZUL (+) | Negativo: Conductor MARRÓN (-) | Puesta a Tierra (PE): BLANCO", correct: false },
+          { text: "Positivo: Conductor AMARILLO (+) | Negativo: Conductor ROJO (-) | Puesta a Tierra (PE): NEGRO", correct: false }
+        ],
+        feedback: "En corriente continua (DC) para instalaciones fotovoltaicas (normas IEC 62446, RETIE y NTC 2050), el color ROJO se reserva para el polo positivo (+), el NEGRO para el polo negativo (-) y el VERDE o VERDE/AMARILLO para la puesta a tierra de protección. Una inversión de polaridad por color equivocado genera daño catastrófico en diodos bypass, protecciones y convertidores MPPT.",
+        normCitation: "RETIE Título 5 • IEC 62446-1 • NTC 2050 Sección 690: Sistemas Fotovoltaicos"
+      },
+      {
+        id: 2,
+        moduleId: 1,
+        moduleName: "MÓDULO 1: CÓDIGO DE COLORES (DC Y AC/PE)",
+        category: "CORRIENTE ALTERNA (AC) TRIFÁSICA EN ESTRELLA",
+        question: "Según el RETIE (Libro 3, Título 5, Tabla 3.5.a), para la salida en corriente alterna (AC) de un inversor trifásico en estrella 208/120 V a 4 hilos, ¿cuál es la combinación obligatoria para las fases, el neutro y la tierra de protección?",
+        diagramType: "ac-cables",
+        options: [
+          { text: "Fases: AMARILLO, AZUL y ROJO | Neutro: BLANCO | Tierra de Protección: DESNUDO o VERDE", correct: true },
+          { text: "Fases: MARRÓN, NEGRO y GRIS | Neutro: AZUL CLARO | Tierra de Protección: AMARILLO", correct: false },
+          { text: "Fases: BLANCO, VERDE y ROJO | Neutro: NEGRO | Tierra de Protección: AZUL", correct: false },
+          { text: "Fases: NEGRO, ROJO y AZUL | Neutro: VERDE | Tierra de Protección: BLANCO", correct: false }
+        ],
+        feedback: "La Tabla 3.5.a del RETIE establece sin excepción para sistemas trifásicos en estrella 208/120 V: Fase A = Amarillo, Fase B = Azul, Fase C = Rojo; Neutro = Blanco o marcado con blanco en partes visibles; Tierra de protección = Desnudo o Verde (tierra aislada: verde o verde/amarillo). ¡El RETIE prohíbe expresamente usar blanco o verde para las fases!",
+        normCitation: "RETIE Libro 3, Título 5, Tabla 3.5.a; NTC 2050 Artículo 200 y 250"
+      },
+      {
+        id: 3,
+        moduleId: 1,
+        moduleName: "MÓDULO 1: CÓDIGO DE COLORES (DC Y AC/PE)",
+        category: "CIRCUITOS DERIVADOS MONOFÁSICOS",
+        question: "De acuerdo con el RETIE Título 5, cuando se deriva un circuito monofásico a partir de un sistema trifásico (por ejemplo para tableros de monitoreo o servicios auxiliares), ¿cómo debe identificarse la fase y qué excepción aplica para la acometida monofásica?",
+        diagramType: null,
+        options: [
+          { text: "El conductor conserva el color de su fase de origen (Amarillo, Azul o Rojo); si es una acometida monofásica derivada de sistema trifásico, una fase también podrá identificarse con NEGRO.", correct: true },
+          { text: "Se debe utilizar siempre color BLANCO en la fase derivada para avisar que es monofásica.", correct: false },
+          { text: "Debe cambiarse a color VERDE para proteger al operador contra choques eléctricos.", correct: false },
+          { text: "No se requiere respetar ningún código de colores siempre y cuando el calibre sea inferior a 8 AWG.", correct: false }
+        ],
+        feedback: "El RETIE Título 5 señala explícitamente: 'En circuitos monofásicos derivados de sistemas trifásicos, el conductor de la fase debe ser marcado de color asignado a la fase en el sistema trifásico donde se derive. Si la acometida es monofásica derivada de sistema trifásico, una fase también podrá identificarse con negro'. Está tajantemente prohibido usar blanco o verde para fases.",
+        normCitation: "RETIE Título 5: Código de colores para conductores de uso eléctrico"
+      },
+      {
+        id: 4,
+        moduleId: 1,
+        moduleName: "MÓDULO 1: CÓDIGO DE COLORES (DC Y AC/PE)",
+        category: "CONDUCTOR PUESTO A TIERRA (NEUTRO) Y CONDUCTOR DE PROTECCIÓN (PE)",
+        question: "¿Cuál es la regla inquebrantable de seguridad respecto al uso de los colores BLANCO y VERDE en cualquier circuito eléctrico según el RETIE y la NTC 2050?",
+        diagramType: null,
+        options: [
+          { text: "El Neutro debe ser BLANCO y la Tierra de protección VERDE o VERDE/AMARILLO; está terminantemente PROHIBIDO utilizar blanco o verde para fases activas.", correct: true },
+          { text: "El color blanco puede utilizarse para una fase viva siempre que se le aplique cinta amarilla en el centro.", correct: false },
+          { text: "El verde puede usarse como retorno de neutro si la longitud de la bandeja portacables es menor a 15 metros.", correct: false },
+          { text: "En corriente continua el conductor verde puede utilizarse indistintamente como polo positivo.", correct: false }
+        ],
+        feedback: "El extracto literal de RETIE indica: 'En todos los casos el neutro debe ser de color blanco o marcado con blanco en todas las partes visibles y la tierra de protección color verde o marcada con franja verde. No se debe utilizar el blanco ni el verde para las fases'. Confundir una fase con neutro o tierra causa accidentes mortales inmediatos.",
+        normCitation: "RETIE Título 5 • NTC 2050 Art. 200-6 y Art. 250-119"
+      },
+
+      // ==========================================
+      // MÓDULO 2: PAR DE APRIETE & TORQUE
+      // ==========================================
+      {
+        id: 5,
+        moduleId: 2,
+        moduleName: "MÓDULO 2: PAR DE APRIETE / PROCEDIMIENTO DE TORQUE",
+        category: "EMBOCADURA Y TRASROSCADO (REQUERIMIENTO OBLIGATORIO)",
+        question: "Al realizar una conexión atornillada en bornes, pletinas o agujeros roscados de un equipo fotovoltaico, ¿cuál es la acción técnica obligatoria e inicial al observar un agujero roscado antes de aplicar la herramienta o el torquímetro?",
+        diagramType: "torque-flow",
+        options: [
+          { text: "Embocar e iniciar el apriete primero A MANO (al menos 2 a 3 vueltas completas) para asegurar que el perno entre perfectamente alineado antes de aplicar el torquímetro/herramienta calibrada, con el fin de EVITAR TRASROSCAR.", correct: true },
+          { text: "Introducir el tornillo directamente con atornillador de impacto a máxima velocidad para asegurar el avance.", correct: false },
+          { text: "Aplicar el torquímetro al valor máximo nominal y forzarlo desde la primera vuelta aunque se sienta duro.", correct: false },
+          { text: "Limar la rosca del equipo con una segueta antes de colocar cualquier perno.", correct: false }
+        ],
+        feedback: "¡Práctica fundamental de montaje electromecánico! Al encontrar un agujero roscado, se debe embocar y dar las primeras vueltas estrictamente a mano. Si se introduce con herramienta mecánica o torquímetro sin verificar el centrado, el perno entra torcido y se trasrosca (strip thread), destruyendo irreversiblemente la rosca del equipo, lo que anula la garantía y crea un falso contacto de alto riesgo térmico.",
+        normCitation: "Procedimiento de Calidad y Montaje Mecánico INVEA SAS • NTC 2050 Art. 110-3(b)"
+      },
+      {
+        id: 6,
+        moduleId: 2,
+        moduleName: "MÓDULO 2: PAR DE APRIETE / PROCEDIMIENTO DE TORQUE",
+        category: "HERRAMIENTA CALIBRADA Y ESPECIFICACIÓN NOMINAL",
+        question: "¿Por qué en las conexiones eléctricas de potencia (cables a barrajes, interruptores de caja moldeada e inversores) es inaceptable apretar 'a pulso' o con llaves estándar sin torquímetro?",
+        diagramType: null,
+        options: [
+          { text: "Porque el subtorque provoca puntos calientes por resistencia de contacto y riesgo de incendio, mientras que el sobretorque deforma pletinas o rompe pernos; se requiere el valor exacto en N·m del fabricante.", correct: true },
+          { text: "Porque las llaves comunes magnetizan los bornes e impiden el flujo de corriente continua.", correct: false },
+          { text: "Porque la NTC 2050 prohíbe el uso de pernos de acero en instalaciones industriales.", correct: false },
+          { text: "Porque apretar con llave común eleva la frecuencia de la red de 60 Hz a 120 Hz.", correct: false }
+        ],
+        feedback: "La resistencia de contacto depende directamente de la presión de apriete. Un par insuficiente (subtorque) eleva la resistencia eléctrica generando sobrecalentamiento por efecto Joule (P = I²·R) y eventual arco eléctrico. El sobretorque estira el perno más allá de su límite elástico, degolla la rosca o fractura la borna. Solo un torquímetro calibrado garantiza el torque prescrito por el fabricante.",
+        normCitation: "NTC 2050 Artículo 110-3(b) • RETIE Libro 2 • Normas IEEE 1584"
+      },
+      {
+        id: 7,
+        moduleId: 2,
+        moduleName: "MÓDULO 2: PAR DE APRIETE / PROCEDIMIENTO DE TORQUE",
+        category: "LACA TESTIGO DE APRIETE (TORQUE SEAL)",
+        question: "En el protocolo de control de calidad de INVEA SAS, una vez que una conexión atornillada ha recibido el torque nominal calibrado, ¿cuál es el propósito de aplicar laca testigo de torque (Torque Seal / marcador de apriete)?",
+        diagramType: null,
+        options: [
+          { text: "Dejar una traza visual quebradiza que certifique la verificación del torque e identifique de inmediato cualquier aflojamiento por vibraciones térmicas o manipulación indebida.", correct: true },
+          { text: "Evitar que la corriente eléctrica se escape por la cabeza del tornillo hacia la carcasa.", correct: false },
+          { text: "Lubricar el perno para que pueda aflojarse rápidamente con los dedos en una emergencia.", correct: false },
+          { text: "Pintar el tornillo para que coincida obligatoriamente con el color de la fase del cable.", correct: false }
+        ],
+        feedback: "La laca testigo de torque (Torque Seal) es una referencia de aseguramiento visual indispensable. Si la tuerca o el perno se gira aunque sea una fracción de milímetro debido a ciclos térmicos o vibración, la película seca se fractura nítidamente, alertando a los inspectores de obra sin necesidad de re-torquear pernos ya conformes.",
+        normCitation: "Plan de Inspección y Ensayos (PIE) INVEA SAS • IEC 62446-1 Inspección Visual"
+      },
+      {
+        id: 8,
+        moduleId: 2,
+        moduleName: "MÓDULO 2: PAR DE APRIETE / PROCEDIMIENTO DE TORQUE",
+        category: "CONEXIONES BIMETÁLICAS Y DILATACIÓN TÉRMICA",
+        question: "Al realizar empalmes y aprietes entre conductores de aluminio y barrajes de cobre en tableros de corriente alterna de la planta solar, ¿cuál es la técnica obligatoria para evitar fallas a largo plazo?",
+        diagramType: null,
+        options: [
+          { text: "Usar terminales bimetálicos certificados (Al/Cu), aplicar grasa inhibidora de óxido (antioxidante) y colocar arandelas cónicas de presión elástica (tipo Belleville).", correct: true },
+          { text: "Apretar el conductor de aluminio directamente contra el cobre al triple del torque para fusionarlos.", correct: false },
+          { text: "Lijar el aluminio y dejarlo expuesto al sol para que se oxide antes de apretarlo fuertemente.", correct: false },
+          { text: "Envolver la unión con teflón de plomería y no usar arandelas metálicas de ningún tipo.", correct: false }
+        ],
+        feedback: "El aluminio y el cobre sufren par galvánico (corrosión electroquímica) y el aluminio experimenta fluencia en frío (creep) y dilatación térmica superior. Se debe usar: 1) Terminal bimetálico Al/Cu, 2) Compuesto inhibidor que rompe la capa dieléctrica de óxido de aluminio, y 3) Arandelas cónicas Belleville que mantienen una presión constante durante los ciclos de temperatura día/noche.",
+        normCitation: "NTC 2050 Artículo 110-14: Conexiones eléctricas • RETIE Capítulo 2"
+      },
+
+      // ==========================================
+      // MÓDULO 3: LÍNEA DE MANDO & PROTOCOLOS PREVIOS
+      // ==========================================
+      {
+        id: 9,
+        moduleId: 3,
+        moduleName: "MÓDULO 3: LÍNEA DE MANDO Y PRE-ENERGIZACIÓN",
+        category: "LÍNEA DE MANDO ANTE AUSENCIA DEL SUPERVISOR (REQUERIMIENTO OBLIGATORIO)",
+        question: "Durante los trabajos de conexionado o maniobra en el parque solar, si el supervisor directo o jefe de obra NO se encuentra presente en el frente de trabajo y surge una duda técnica o necesidad de conectar un circuito no previsto, ¿cuál es la orden de seguridad obligatoria?",
+        diagramType: null,
+        options: [
+          { text: "DETENERSE DE INMEDIATO (Stop Work), NO realizar la conexión ni maniobra alguna, y esperar la instrucción formal, clara y escrita del responsable de obra o supervisor habilitado.", correct: true },
+          { text: "Continuar la conexión basándose en la intuición o criterio propio para no retrasar el avance del proyecto.", correct: false },
+          { text: "Conectar los cables rápidamente y probar si el inversor enciende sin saltar alarmas.", correct: false },
+          { text: "Pedirle autorización verbal a un ayudante de obra civil de otra cuadrilla para proseguir.", correct: false }
+        ],
+        feedback: "¡Principio de Interrupción Segura (Stop Work Authority)! En INVEA SAS y bajo el estándar RETIE, ante la ausencia del supervisor de obra o falta de instrucción escrita validada, el operario debe DETENERSE. Asumir maniobras no autorizadas a criterio propio es la principal causa de electrocuciones, arcos eléctricos y pérdida de vidas en proyectos energéticos.",
+        normCitation: "Reglamento de Seguridad HSEQ INVEA SAS • RETIE Libro 1 Título 2: Línea de Autoridad"
+      },
+      {
+        id: 10,
+        moduleId: 3,
+        moduleName: "MÓDULO 3: LÍNEA DE MANDO Y PRE-ENERGIZACIÓN",
+        category: "LAS 5 REGLAS DE ORO DE SEGURIDAD ELÉCTRICA",
+        question: "¿Cuál es la secuencia cronológica y estricta de las '5 Reglas de Oro' que debe verificarse antes de intervenir cualquier circuito en baja o media tensión en la planta solar?",
+        diagramType: null,
+        options: [
+          { text: "1. Corte visible/efectivo • 2. Bloqueo y etiquetado (LOTO) • 3. Comprobación de ausencia de tensión • 4. Puesta a tierra y en cortocircuito • 5. Señalización y delimitación de la zona de trabajo.", correct: true },
+          { text: "1. Desconectar bornes • 2. Colocar cinta • 3. Tocar cables • 4. Limpiar el suelo • 5. Salir del recinto.", correct: false },
+          { text: "1. Medir corriente con pinza • 2. Desenergizar • 3. Poner candado • 4. Retirar EPP • 5. Cerrar puerta.", correct: false },
+          { text: "1. Poner a tierra con el circuito vivo • 2. Bajar breakers • 3. Gritar aviso • 4. Trabajar rápido • 5. Re-energizar.", correct: false }
+        ],
+        feedback: "Las 5 Reglas de Oro son el estándar supremo de seguridad en RETIE y NFPA 70E: 1) Corte efectivo con apertura visible, 2) Bloqueo mecánico y etiquetado para impedir reconexión intempestiva (LOTO), 3) Comprobación instrumental de ausencia de tensión (probador calibrado comprobado antes y después), 4) Puesta a tierra y cortocircuito, 5) Delimitación y señalización de la zona de peligro.",
+        normCitation: "RETIE Capítulo 2: Prácticas de Trabajo Seguras • NTC 2050 • NFPA 70E"
+      },
+      {
+        id: 11,
+        moduleId: 3,
+        moduleName: "MÓDULO 3: LÍNEA DE MANDO Y PRE-ENERGIZACIÓN",
+        category: "VERIFICACIÓN PREVIA DE STRINGS FOTOVOLTAICOS",
+        question: "Antes de acoplar un conector MC4 de un string fotovoltaico a una caja de combinación (combiner box) o al inversor, ¿cuál es la prueba obligatoria con multímetro?",
+        diagramType: null,
+        options: [
+          { text: "Medir con multímetro categoría CAT III 1000V / CAT IV 600V la polaridad exacta (+ y -) y que la tensión de circuito abierto (Voc) coincida con el cálculo de diseño y no supere el límite del equipo.", correct: true },
+          { text: "Cortocircuitar los terminales directamente para ver el tamaño de la chispa eléctrica producida.", correct: false },
+          { text: "Conectar a ciegas, confiando en que el conector macho siempre es positivo sin importar quién lo ponchó.", correct: false },
+          { text: "Medir únicamente la resistencia óhmica entre el chasis del panel y el suelo con un buscapolos.", correct: false }
+        ],
+        feedback: "Antes de interconectar cualquier string (según IEC 62446-1), se debe verificar con multímetro de categoría de seguridad adecuada: 1) Polaridad correcta (+ con punta roja, - con punta negra) sin signo negativo en el display, y 2) Tensión Voc corregida por temperatura ambiente, certificando que no supere la tensión máxima admisible de entrada del inversor (típicamente 1000V o 1500V DC).",
+        normCitation: "IEC 62446-1: Ensayos de puesta en marcha • NTC 2050 Sección 690-7"
+      },
+
+      // ==========================================
+      // MÓDULO 4: VACÍOS OPERATIVOS, EPP & ARCO DC
+      // ==========================================
+      {
+        id: 12,
+        moduleId: 4,
+        moduleName: "MÓDULO 4: VACÍOS OPERATIVOS, EPP Y ARCO ELÉCTRICO",
+        category: "COMPORTAMIENTO CRÍTICO DEL ARCO ELÉCTRICO EN DC",
+        question: "¿Por qué el arco eléctrico (Arc Flash) en corriente continua (DC) fotovoltaica es mucho más persistente, destructivo y difícil de autoextinguir que en corriente alterna (AC)?",
+        diagramType: "arc-flash",
+        options: [
+          { text: "Porque la corriente continua no posee paso por cero (a diferencia de AC que cruza por cero 120 veces por segundo); en DC el arco no se extingue espontáneamente y mantiene plasma a más de 10.000 °C.", correct: true },
+          { text: "Porque la corriente continua viaja a través del plástico del cable sin calentar el cobre.", correct: false },
+          { text: "Porque los paneles solares emiten gases explosivos cuando se forman arcos eléctricos.", correct: false },
+          { text: "Porque el arco en DC no produce radiación térmica y solo se apaga con agua fría.", correct: false }
+        ],
+        feedback: "En corriente alterna (AC 60 Hz), la onda senoidal pasa por cero 120 veces por segundo, lo que permite que los gases ionizados se enfríen y faciliten la autoextinción del arco al abrir contactos. En DC NO HAY CRUCE POR CERO: el arco es continuo, extremadamente estable y sostenido en el aire, alcanzando temperaturas sobre 10.000 °C capaces de fundir metales e incinerar ropa en milisegundos.",
+        normCitation: "NFPA 70E: Standard for Electrical Safety in the Workplace • IEEE 1584"
+      },
+      {
+        id: 13,
+        moduleId: 4,
+        moduleName: "MÓDULO 4: VACÍOS OPERATIVOS, EPP Y ARCO ELÉCTRICO",
+        category: "DESCONEXIÓN EN VACÍO VS. DESCONEXIÓN BAJO CARGA",
+        question: "¿Por qué está terminantemente PROHIBIDO desacoplar o desenchufar conectores solares rápidos (tipo MC4 u homólogos) mientras el string está operando bajo carga con corriente circulando?",
+        diagramType: null,
+        options: [
+          { text: "Porque los conectores MC4 son conectores de 'corte en vacío' (no bajo carga); abrirlos con corriente provoca un arco voltaico explosivo que calcina el conector y puede quemar manos y rostro.", correct: true },
+          { text: "Porque al abrirlos bajo carga se borra la memoria flash del microprocesador del inversor.", correct: false },
+          { text: "Porque el plástico del conector MC4 pierde su impermeabilidad si se abre con luz solar.", correct: false },
+          { text: "Porque los paneles solares se descargan como una batería y pierden su potencia nominal.", correct: false }
+        ],
+        feedback: "La normativa técnica (NTC 2050 Art. 690-17 e IEC 62548) tipifica los conectores MC4 como dispositivos de maniobra sin carga. Desconectarlos con corriente circulante genera un arco instantáneo de alta energía en el punto de apertura. Primero se debe asegurar el VACÍO OPERATIVO: apagar el seccionador bajo carga del inversor o caja de desconexión antes de tocar cualquier conector rápido.",
+        normCitation: "NTC 2050 Art. 690-17: Medios de desconexión • IEC 62548"
+      },
+      {
+        id: 14,
+        moduleId: 4,
+        moduleName: "MÓDULO 4: VACÍOS OPERATIVOS, EPP Y ARCO ELÉCTRICO",
+        category: "EPP DIELÉCTRICO Y PROTECCIÓN CONTRA ARCO",
+        question: "Al realizar verificaciones o maniobras en cajas de string (1000V o 1500V DC) e inversores solares, ¿cuál es el conjunto de EPP dieléctrico y la práctica obligatoria con los guantes dieléctricos?",
+        diagramType: null,
+        options: [
+          { text: "Guantes dieléctricos de la clase adecuada acompañados SIEMPRE de sobreguantes de cuero (badana), careta facial Arc Flash, ropa 100% algodón/ignífuga y prueba previa de inflado con aire.", correct: true },
+          { text: "Guantes de látex doméstico sin sobreguante y gafas oscuras de sol de policarbonato normal.", correct: false },
+          { text: "Guantes de carnaza humedecidos y ropa deportiva de nylon o poliéster ajustada al cuerpo.", correct: false },
+          { text: "Cualquier calzado deportivo siempre que tenga suela de goma común.", correct: false }
+        ],
+        feedback: "Bajo RETIE y NFPA 70E: 1) Los guantes dieléctricos (Clase 0 para 1000V o Clase 2/3 para 1500V) DEBEN usarse siempre con sobreguantes de cuero badana para proteger la goma contra pinchazos; 2) Se debe hacer prueba de inflado manual antes de cada uso para detectar fugas microscópicas; 3) Ropa 100% algodón o ignífuga FR (prohibido nylon/poliéster que se derrite sobre la piel); 4) Careta contra arco eléctrico.",
+        normCitation: "RETIE Capítulo 2: EPP Obligatorio • NFPA 70E Tabla 130.7 • ASTM D120"
+      },
+      {
+        id: 15,
+        moduleId: 4,
+        moduleName: "MÓDULO 4: VACÍOS OPERATIVOS, EPP Y ARCO ELÉCTRICO",
+        category: "CONDICIÓN DE 'ENERGÍA VIVA' EN MÓDULOS FOTOVOLTAICOS",
+        question: "En una planta solar a campo abierto, ¿cuál es la diferencia fundamental en la gestión de riesgo entre los módulos fotovoltaicos y un generador diésel o transformador desenergizado?",
+        diagramType: null,
+        options: [
+          { text: "Los módulos fotovoltaicos generan tensión instantáneamente apenas reciben radiación solar o luz ambiental; sus terminales deben tratarse SIEMPRE como circuitos vivos (energizados) pues no se pueden 'apagar' con un interruptor.", correct: true },
+          { text: "Los paneles solares solo generan corriente si el operador presiona un interruptor en el marco metálico.", correct: false },
+          { text: "En días nublados los paneles solares se descargan totalmente y no representan ningún peligro eléctrico.", correct: false },
+          { text: "Los terminales solares solo tienen tensión si están conectados físicamente a la red de la electrificadora.", correct: false }
+        ],
+        feedback: "A diferencia de generadores mecánicos que se detienen cortando combustible, las celdas solares fotovoltaicas son generadores intrínsecos dependientes de fotones: mientras haya radiación solar o luminosidad difusa, los paneles generan tensión. No existe un interruptor para apagar el sol. Por ende, los terminales deben considerarse permanentemente ENERGIZADOS salvo que se cubran físicamente con lonas opacas.",
+        normCitation: "NTC 2050 Sección 690 • Manual de Seguridad Fotovoltaica INVEA SAS"
+      }
+    ];
+
+    // Application State Object
+    let appState = {
+      worker: {
+        name: "",
+        doc: "",
+        role: "",
+        date: new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' })
+      },
+      currentQuestionIndex: 0,
+      userAnswers: {}, // questionId: { selectedOptionIndex, isCorrect }
+      isExamFinished: false,
+      score: 0,
+      percentage: 0
+    };
+
+    /**
+     * Initialize Application & Restore State if available
+     */
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Initialize Lucide Icons
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+
+      // Check Notebook Shim API for persisted state
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const savedState = await window.notebookAppApi.getAppState();
+          if (savedState && savedState.worker && savedState.worker.name) {
+            appState = savedState;
+            if (appState.isExamFinished) {
+              showResultsScreen();
+            } else if (appState.worker.name && appState.currentQuestionIndex > 0) {
+              updateWorkerTag();
+              showScreen('screen-quiz');
+              renderCurrentQuestion();
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("Shim API getAppState check:", err);
+      }
+    });
+
+    /**
+     * Save State Helper using notebookAppApi
+     */
+    async function persistState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (err) {
+        console.warn("Shim API setAppState warning:", err);
+      }
+    }
+
+    /**
+     * Switch Screen View
+     */
+    function showScreen(screenId) {
+      const screens = document.querySelectorAll('.screen-view');
+      screens.forEach(screen => {
+        screen.classList.remove('active');
+      });
+      const activeScreen = document.getElementById(screenId);
+      if (activeScreen) {
+        activeScreen.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Re-trigger icon rendering
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    /**
+     * Update Worker Tag in Navbar
+     */
+    function updateWorkerTag() {
+      const topPill = document.getElementById('top-user-pill');
+      if (topPill && appState.worker.name) {
+        topPill.style.display = 'inline-block';
+        topPill.textContent = `${appState.worker.name} • CC ${appState.worker.doc}`;
+      }
+    }
+
+    /**
+     * Handle Start Exam from Registration Form
+     */
+    function handleStartExam(event) {
+      event.preventDefault();
+      const nameInput = document.getElementById('worker-name');
+      const docInput = document.getElementById('worker-doc');
+      const roleSelect = document.getElementById('worker-role');
+      const consentBox = document.getElementById('worker-consent');
+      const errorDiv = document.getElementById('registration-error');
+
+      if (!nameInput.value.trim() || !docInput.value.trim() || !roleSelect.value || !consentBox.checked) {
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      errorDiv.style.display = 'none';
+      appState.worker.name = nameInput.value.trim();
+      appState.worker.doc = docInput.value.trim();
+      appState.worker.role = roleSelect.value;
+      appState.worker.date = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
+      appState.currentQuestionIndex = 0;
+      appState.userAnswers = {};
+      appState.isExamFinished = false;
+
+      updateWorkerTag();
+      persistState();
+
+      showScreen('screen-quiz');
+      renderCurrentQuestion();
+    }
+
+    /**
+     * Render the Current Question
+     */
+    function renderCurrentQuestion() {
+      const qIndex = appState.currentQuestionIndex;
+      const qData = QUIZ_QUESTIONS[qIndex];
+      if (!qData) return;
+
+      // Update progress bar
+      const progressPercent = ((qIndex) / QUIZ_QUESTIONS.length) * 100;
+      const progressFill = document.getElementById('quiz-progress-fill');
+      if (progressFill) {
+        progressFill.style.width = `${progressPercent}%`;
+      }
+
+      // Update Header Badges
+      const modLabel = document.getElementById('quiz-module-label');
+      if (modLabel) modLabel.textContent = qData.moduleName;
+
+      const qCounter = document.getElementById('quiz-question-counter');
+      if (qCounter) qCounter.textContent = `Pregunta ${qIndex + 1} de ${QUIZ_QUESTIONS.length}`;
+
+      const qBadge = document.getElementById('question-number-badge');
+      if (qBadge) qBadge.textContent = String(qIndex + 1).padStart(2, '0');
+
+      const catTag = document.getElementById('question-category-tag');
+      if (catTag) catTag.textContent = qData.category;
+
+      const qText = document.getElementById('question-text');
+      if (qText) qText.textContent = qData.question;
+
+      const workerTag = document.getElementById('quiz-worker-tag');
+      if (workerTag) workerTag.textContent = `${appState.worker.role}`;
+
+      // Update Live Score display
+      const currentAnsweredCount = Object.keys(appState.userAnswers).length;
+      let currentCorrectCount = 0;
+      Object.values(appState.userAnswers).forEach(ans => {
+        if (ans.isCorrect) currentCorrectCount++;
+      });
+      const scoreTag = document.getElementById('quiz-score-live');
+      if (scoreTag) {
+        scoreTag.textContent = `Aciertos: ${currentCorrectCount} / ${currentAnsweredCount}`;
+      }
+
+      // Render Visual Diagram if applicable
+      renderDiagram(qData.diagramType);
+
+      // Render Multiple Choice Options
+      const optionsContainer = document.getElementById('options-container');
+      optionsContainer.innerHTML = '';
+
+      const letters = ['A', 'B', 'C', 'D'];
+      const isAlreadyAnswered = appState.userAnswers[qData.id] !== undefined;
+
+      qData.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'option-button';
+        btn.setAttribute('role', 'radio');
+        btn.setAttribute('aria-checked', 'false');
+
+        const letterBox = document.createElement('span');
+        letterBox.className = 'option-letter';
+        letterBox.textContent = letters[idx];
+
+        const textSpan = document.createElement('span');
+        textSpan.style.flex = '1';
+        textSpan.textContent = opt.text;
+
+        btn.appendChild(letterBox);
+        btn.appendChild(textSpan);
+
+        if (!isAlreadyAnswered) {
+          btn.onclick = () => selectOption(idx);
+        } else {
+          btn.disabled = true;
+          const userAns = appState.userAnswers[qData.id];
+          if (idx === userAns.selectedOptionIndex) {
+            btn.classList.add(userAns.isCorrect ? 'correct' : 'incorrect');
+            btn.setAttribute('aria-checked', 'true');
+          } else if (opt.correct) {
+            btn.classList.add('correct');
+          } else {
+            btn.classList.add('dimmed');
+          }
+        }
+
+        optionsContainer.appendChild(btn);
+      });
+
+      // Feedback Box State
+      const feedbackPanel = document.getElementById('feedback-panel');
+      if (isAlreadyAnswered) {
+        showFeedback(appState.userAnswers[qData.id].isCorrect, qData);
+      } else {
+        feedbackPanel.style.display = 'none';
+        feedbackPanel.className = 'feedback-box';
+      }
+
+      // Re-trigger icons
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    /**
+     * Render SVG Visual Diagrams for technical clarity
+     */
+    function renderDiagram(diagramType) {
+      const container = document.getElementById('diagram-container');
+      if (!diagramType) {
+        container.style.display = 'none';
+        container.innerHTML = '';
+        return;
+      }
+
+      container.style.display = 'block';
+
+      if (diagramType === 'dc-cables') {
+        container.innerHTML = `
+          <div class="diagram-header">
+            <i data-lucide="layers" style="width: 14px; height: 14px;" aria-hidden="true"></i>
+            <span>Diagrama Técnico: Identificación de Conductor DC Fotovoltaico e Inversor</span>
+          </div>
+          <svg viewBox="0 0 760 160" width="100%" height="auto" style="max-height: 170px;" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background panel -->
+            <rect x="0" y="0" width="760" height="160" fill="#f4f4f4" rx="4"/>
+            
+            <!-- Inverter DC Port Symbol -->
+            <rect x="610" y="20" width="130" height="120" fill="#ffffff" stroke="#8d8d8d" stroke-width="1.5" rx="3"/>
+            <text x="675" y="45" font-family="'IBM Plex Mono', monospace" font-size="12" font-weight="700" fill="#161616" text-anchor="middle">INVERSOR PV</text>
+            <text x="675" y="65" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#525252" text-anchor="middle">BORNERA DC</text>
+            
+            <!-- Ports on Inverter -->
+            <circle cx="630" cy="90" r="7" fill="#da1e28"/>
+            <text x="645" y="94" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" fill="#da1e28">DC +</text>
+            
+            <circle cx="630" cy="118" r="7" fill="#161616"/>
+            <text x="645" y="122" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" fill="#161616">DC -</text>
+
+            <!-- Positive Conductor (Red) -->
+            <text x="20" y="42" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" fill="#da1e28">POLO POSITIVO (+)</text>
+            <path d="M 160 38 L 570 38 L 610 90" fill="none" stroke="#da1e28" stroke-width="8" stroke-linecap="round"/>
+            <rect x="230" y="25" width="130" height="24" fill="#ffffff" stroke="#da1e28" rx="2"/>
+            <text x="295" y="41" font-family="'IBM Plex Mono', monospace" font-size="10" font-weight="700" fill="#da1e28" text-anchor="middle">AISLAMIENTO ROJO</text>
+            
+            <!-- Negative Conductor (Black) -->
+            <text x="20" y="92" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" fill="#161616">POLO NEGATIVO (-)</text>
+            <path d="M 160 88 L 560 88 L 610 118" fill="none" stroke="#161616" stroke-width="8" stroke-linecap="round"/>
+            <rect x="230" y="75" width="130" height="24" fill="#ffffff" stroke="#161616" rx="2"/>
+            <text x="295" y="91" font-family="'IBM Plex Mono', monospace" font-size="10" font-weight="700" fill="#161616" text-anchor="middle">AISLAMIENTO NEGRO</text>
+
+            <!-- Earth Conductor (Green/Yellow) -->
+            <text x="20" y="140" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" fill="#198038">TIERRA CHASIS (PE)</text>
+            <path d="M 160 136 L 540 136" fill="none" stroke="#198038" stroke-width="6" stroke-dasharray="14 6" stroke-linecap="round"/>
+            <rect x="230" y="124" width="160" height="22" fill="#ffffff" stroke="#198038" rx="2"/>
+            <text x="310" y="139" font-family="'IBM Plex Mono', monospace" font-size="10" font-weight="700" fill="#198038" text-anchor="middle">VERDE / VERDE-AMARILLO</text>
+          </svg>
+        `;
+      } else if (diagramType === 'ac-cables') {
+        container.innerHTML = `
+          <div class="diagram-header">
+            <i data-lucide="layers" style="width: 14px; height: 14px;" aria-hidden="true"></i>
+            <span>Diagrama Técnico: Salida Trifásica en Estrella 208/120 V (RETIE Tabla 3.5.a)</span>
+          </div>
+          <svg viewBox="0 0 760 170" width="100%" height="auto" style="max-height: 180px;" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="760" height="170" fill="#f4f4f4" rx="4"/>
+
+            <!-- Phase A: Yellow -->
+            <text x="20" y="32" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" fill="#b28600">FASE A (L1)</text>
+            <rect x="130" y="22" width="460" height="14" fill="#f1c21b" stroke="#b28600" stroke-width="1" rx="2"/>
+            <text x="610" y="34" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" fill="#161616">AMARILLO</text>
+
+            <!-- Phase B: Blue -->
+            <text x="20" y="62" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" fill="#0f62fe">FASE B (L2)</text>
+            <rect x="130" y="52" width="460" height="14" fill="#0f62fe" rx="2"/>
+            <text x="610" y="64" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" fill="#161616">AZUL</text>
+
+            <!-- Phase C: Red -->
+            <text x="20" y="92" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" fill="#da1e28">FASE C (L3)</text>
+            <rect x="130" y="82" width="460" height="14" fill="#da1e28" rx="2"/>
+            <text x="610" y="94" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" fill="#161616">ROJO</text>
+
+            <!-- Neutral: White -->
+            <text x="20" y="122" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" fill="#525252">NEUTRO (N)</text>
+            <rect x="130" y="112" width="460" height="14" fill="#ffffff" stroke="#8d8d8d" stroke-width="1.5" rx="2"/>
+            <text x="610" y="124" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" fill="#161616">BLANCO</text>
+
+            <!-- PE: Green -->
+            <text x="20" y="152" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" fill="#198038">TIERRA (PE)</text>
+            <rect x="130" y="142" width="460" height="14" fill="#198038" rx="2"/>
+            <text x="610" y="154" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" fill="#161616">VERDE / VERDE-AMARILLO</text>
+          </svg>
+        `;
+      } else if (diagramType === 'torque-flow') {
+        container.innerHTML = `
+          <div class="diagram-header">
+            <i data-lucide="wrench" style="width: 14px; height: 14px;" aria-hidden="true"></i>
+            <span>Procedimiento Técnico de Par de Apriete en Agujeros Roscados</span>
+          </div>
+          <svg viewBox="0 0 760 120" width="100%" height="auto" style="max-height: 130px;" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="760" height="120" fill="#f4f4f4" rx="4"/>
+
+            <!-- Step 1: Hand start -->
+            <rect x="20" y="20" width="220" height="80" fill="#ffffff" stroke="#0f62fe" stroke-width="2" rx="3"/>
+            <text x="35" y="42" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" fill="#0f62fe">PASO 1: A MANO</text>
+            <text x="35" y="62" font-family="'IBM Plex Sans', sans-serif" font-size="11" fill="#161616">Embocar 2-3 hilos a mano</text>
+            <text x="35" y="80" font-family="'IBM Plex Sans', sans-serif" font-size="10" font-weight="600" fill="#da1e28">¡Previene el trasroscado!</text>
+
+            <!-- Arrow 1 -->
+            <path d="M 250 60 L 275 60" fill="none" stroke="#8d8d8d" stroke-width="2" marker-end="url(#arrow)"/>
+
+            <!-- Step 2: Calibrated Torque -->
+            <rect x="280" y="20" width="220" height="80" fill="#ffffff" stroke="#8d8d8d" stroke-width="1.5" rx="3"/>
+            <text x="295" y="42" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" fill="#161616">PASO 2: TORQUÍMETRO</text>
+            <text x="295" y="62" font-family="'IBM Plex Sans', sans-serif" font-size="11" fill="#161616">Apretar al valor nominal</text>
+            <text x="295" y="80" font-family="'IBM Plex Sans', sans-serif" font-size="10" fill="#525252">Herramienta calibrada (N·m)</text>
+
+            <!-- Arrow 2 -->
+            <path d="M 510 60 L 535 60" fill="none" stroke="#8d8d8d" stroke-width="2"/>
+
+            <!-- Step 3: Torque Seal -->
+            <rect x="540" y="20" width="200" height="80" fill="#ffffff" stroke="#198038" stroke-width="2" rx="3"/>
+            <text x="555" y="42" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" fill="#198038">PASO 3: LACA TESTIGO</text>
+            <text x="555" y="62" font-family="'IBM Plex Sans', sans-serif" font-size="11" fill="#161616">Aplicar Torque Seal</text>
+            <text x="555" y="80" font-family="'IBM Plex Sans', sans-serif" font-size="10" fill="#525252">Inspección visual QA/QC</text>
+          </svg>
+        `;
+      } else if (diagramType === 'arc-flash') {
+        container.innerHTML = `
+          <div class="diagram-header">
+            <i data-lucide="flame" style="width: 14px; height: 14px;" aria-hidden="true"></i>
+            <span>Diferencia Crítica de Extinción: AC (Cruce por Cero) vs. DC Solar (Arco Continuo)</span>
+          </div>
+          <svg viewBox="0 0 760 130" width="100%" height="auto" style="max-height: 140px;" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="760" height="130" fill="#f4f4f4" rx="4"/>
+
+            <!-- AC Wave -->
+            <rect x="20" y="15" width="345" height="100" fill="#ffffff" stroke="#8d8d8d" stroke-width="1" rx="3"/>
+            <text x="35" y="35" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" fill="#0f62fe">CORRIENTE ALTERNA (AC)</text>
+            <path d="M 40 70 Q 75 35 110 70 T 180 70 T 250 70 T 320 70" fill="none" stroke="#0f62fe" stroke-width="2.5"/>
+            <line x1="35" y1="70" x2="340" y2="70" stroke="#8d8d8d" stroke-width="1" stroke-dasharray="2 2"/>
+            <text x="35" y="102" font-family="'IBM Plex Sans', sans-serif" font-size="10" fill="#198038">✓ Cruce por cero 120 veces/s (autoextinguible)</text>
+
+            <!-- DC Line -->
+            <rect x="385" y="15" width="355" height="100" fill="#ffffff" stroke="#da1e28" stroke-width="1.5" rx="3"/>
+            <text x="400" y="35" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" fill="#da1e28">CORRIENTE CONTINUA SOLAR (DC)</text>
+            <line x1="400" y1="55" x2="720" y2="55" stroke="#da1e28" stroke-width="4"/>
+            <text x="400" y="82" font-family="'IBM Plex Mono', monospace" font-size="10" font-weight="700" fill="#da1e28">¡SIN CRUCE POR CERO • TENSIÓN CONSTANTE!</text>
+            <text x="400" y="102" font-family="'IBM Plex Sans', sans-serif" font-size="10" fill="#525252">Arco persistente, plasma sobre 10.000 °C</text>
+          </svg>
+        `;
+      }
+    }
+
+    /**
+     * Handle User Option Selection
+     */
+    function selectOption(optionIndex) {
+      const qIndex = appState.currentQuestionIndex;
+      const qData = QUIZ_QUESTIONS[qIndex];
+      if (!qData) return;
+
+      const isCorrect = qData.options[optionIndex].correct;
+
+      // Save user answer in state
+      appState.userAnswers[qData.id] = {
+        selectedOptionIndex: optionIndex,
+        isCorrect: isCorrect
+      };
+
+      // Disable all option buttons and colorize
+      const optionsContainer = document.getElementById('options-container');
+      const buttons = optionsContainer.querySelectorAll('.option-button');
+
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === optionIndex) {
+          btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+          btn.setAttribute('aria-checked', 'true');
+        } else if (qData.options[idx].correct) {
+          btn.classList.add('correct');
+        } else {
+          btn.classList.add('dimmed');
+        }
+      });
+
+      // Update Live Score display
+      let currentCorrectCount = 0;
+      Object.values(appState.userAnswers).forEach(ans => {
+        if (ans.isCorrect) currentCorrectCount++;
+      });
+      const scoreTag = document.getElementById('quiz-score-live');
+      if (scoreTag) {
+        scoreTag.textContent = `Aciertos: ${currentCorrectCount} / ${Object.keys(appState.userAnswers).length}`;
+      }
+
+      // Show immediate feedback
+      showFeedback(isCorrect, qData);
+
+      // Persist state
+      persistState();
+    }
+
+    /**
+     * Display Formative Feedback Panel
+     */
+    function showFeedback(isCorrect, qData) {
+      const feedbackPanel = document.getElementById('feedback-panel');
+      const statusTitle = document.getElementById('feedback-status-title');
+      const body = document.getElementById('feedback-body');
+      const normText = document.getElementById('feedback-norm-text');
+      const nextBtn = document.getElementById('btn-next-question');
+
+      feedbackPanel.style.display = 'block';
+      feedbackPanel.className = `feedback-box ${isCorrect ? 'correct' : 'incorrect'}`;
+
+      if (isCorrect) {
+        statusTitle.className = 'feedback-status-title correct';
+        statusTitle.innerHTML = `<i data-lucide="check-circle" style="width: 18px; height: 18px;" aria-hidden="true"></i> RESPUESTA CORRECTA`;
+      } else {
+        statusTitle.className = 'feedback-status-title incorrect';
+        statusTitle.innerHTML = `<i data-lucide="alert-triangle" style="width: 18px; height: 18px;" aria-hidden="true"></i> RESPUESTA INCORRECTA`;
+      }
+
+      body.innerHTML = `<strong>Justificación Técnica:</strong> ${qData.feedback}`;
+      normText.textContent = qData.normCitation;
+
+      // If it's the last question
+      if (appState.currentQuestionIndex === QUIZ_QUESTIONS.length - 1) {
+        nextBtn.innerHTML = `Finalizar y Ver Resultados <i data-lucide="award" style="width: 16px; height: 16px;" aria-hidden="true"></i>`;
+      } else {
+        nextBtn.innerHTML = `Siguiente Pregunta <i data-lucide="arrow-right" style="width: 16px; height: 16px;" aria-hidden="true"></i>`;
+      }
+
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+
+      // Smooth scroll down to feedback
+      feedbackPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    /**
+     * Advance to Next Question or Final Results
+     */
+    function handleNextQuestion() {
+      if (appState.currentQuestionIndex < QUIZ_QUESTIONS.length - 1) {
+        appState.currentQuestionIndex++;
+        persistState();
+        renderCurrentQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        // Complete the exam
+        calculateFinalResults();
+        showResultsScreen();
+      }
+    }
+
+    /**
+     * Calculate Final Results
+     */
+    function calculateFinalResults() {
+      let correctAnswers = 0;
+      QUIZ_QUESTIONS.forEach(q => {
+        const userAns = appState.userAnswers[q.id];
+        if (userAns && userAns.isCorrect) {
+          correctAnswers++;
+        }
+      });
+
+      appState.score = correctAnswers;
+      appState.percentage = Math.round((correctAnswers / QUIZ_QUESTIONS.length) * 100);
+      appState.isExamFinished = true;
+      persistState();
+    }
+
+    /**
+     * Show Results Screen & Render Certificate
+     */
+    function showResultsScreen() {
+      showScreen('screen-results');
+
+      const isApproved = appState.percentage >= 85;
+
+      // Update hero card stats
+      const percentDisplay = document.getElementById('final-percentage');
+      if (percentDisplay) percentDisplay.textContent = `${appState.percentage}%`;
+
+      const ratioDisplay = document.getElementById('final-ratio');
+      if (ratioDisplay) ratioDisplay.textContent = `${appState.score} de ${QUIZ_QUESTIONS.length} Aciertos`;
+
+      const pill = document.getElementById('approval-pill');
+      const heading = document.getElementById('result-status-heading');
+      const desc = document.getElementById('result-status-desc');
+
+      if (isApproved) {
+        pill.className = 'approval-banner approved';
+        pill.innerHTML = `<i data-lucide="check-circle-2" style="width: 16px; height: 16px;" aria-hidden="true"></i> APROBADO (HABILITADO EN OBRA)`;
+        heading.textContent = '¡Felicitaciones! Ha demostrado la competencia técnica requerida';
+        desc.textContent = `Cumple con el estándar de seguridad eléctrica de INVEA SAS (exigencia mínima del 85%). Su certificación oficial está lista para ser descargada o impresa.`;
+      } else {
+        pill.className = 'approval-banner failed';
+        pill.innerHTML = `<i data-lucide="x-circle" style="width: 16px; height: 16px;" aria-hidden="true"></i> NO APROBADO (REQUIERE REINDUCCIÓN)`;
+        heading.textContent = 'Competencia No Alcanzada (Umbral Mínimo 85%)';
+        desc.textContent = `El puntaje obtenido (${appState.percentage}%) es inferior al 85% exigido por la política de seguridad eléctrica de INVEA SAS. Debe coordinar una reinducción con el área de HSEQ y repetir la evaluación.`;
+      }
+
+      // Render Modules Diagnostics Breakdown
+      renderModuleBreakdown();
+
+      // Render Certificate Content
+      renderCertificate(isApproved);
+
+      // Render Answer Audit Accordion
+      renderReviewAccordion();
+
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    /**
+     * Render Diagnostics breakdown by 4 modules
+     */
+    function renderModuleBreakdown() {
+      const container = document.getElementById('modules-breakdown-container');
+      container.innerHTML = '';
+
+      const modules = [
+        { id: 1, name: "Módulo 1: Códigos de Color (DC & AC/PE)", total: 4 },
+        { id: 2, name: "Módulo 2: Par de Apriete & Torque", total: 4 },
+        { id: 3, name: "Módulo 3: Línea de Mando & Pre-energización", total: 3 },
+        { id: 4, name: "Módulo 4: EPP Dieléctrico & Arco DC", total: 4 }
+      ];
+
+      modules.forEach(mod => {
+        let correctInMod = 0;
+        QUIZ_QUESTIONS.filter(q => q.moduleId === mod.id).forEach(q => {
+          if (appState.userAnswers[q.id] && appState.userAnswers[q.id].isCorrect) {
+            correctInMod++;
+          }
+        });
+
+        const modPercent = Math.round((correctInMod / mod.total) * 100);
+
+        const card = document.createElement('div');
+        card.className = 'module-result-card';
+        card.innerHTML = `
+          <div class="module-result-header">
+            <span class="module-result-name">${mod.name}</span>
+            <span class="module-result-score text-mono">${correctInMod}/${mod.total} (${modPercent}%)</span>
+          </div>
+          <div class="module-result-bar-bg">
+            <div class="module-result-bar-fill" style="width: ${modPercent}%; background-color: ${modPercent >= 75 ? 'var(--tertiary)' : 'var(--error)'};"></div>
+          </div>
+          <div class="module-result-feedback">
+            ${modPercent >= 75 ? '✓ Dominio normativo adecuado' : '⚠ Reforzar conceptos en campo'}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    /**
+     * Render Printable Certificate
+     */
+    function renderCertificate(isApproved) {
+      const folioEl = document.getElementById('cert-folio');
+      const nameEl = document.getElementById('cert-worker-name-display');
+      const metaEl = document.getElementById('cert-worker-meta-display');
+      const dateEl = document.getElementById('cert-date-display');
+      const scoreEl = document.getElementById('cert-score-display');
+      const statusEl = document.getElementById('cert-status-display');
+      const sigWorkerName = document.getElementById('cert-sig-worker-name');
+      const sigWorkerDoc = document.getElementById('cert-sig-worker-doc');
+
+      // Generate a reproducible verification hash from CC and timestamp
+      const docClean = (appState.worker.doc || '000000').replace(/\D/g, '');
+      const certHash = `INV-PV-2026-CC${docClean}`;
+
+      if (folioEl) folioEl.textContent = `FOLIO: ${certHash}`;
+      if (nameEl) nameEl.textContent = (appState.worker.name || 'TRABAJADOR EVALUADO').toUpperCase();
+      if (metaEl) metaEl.textContent = `CÉDULA DE CIUDADANÍA: ${appState.worker.doc} • CARGO: ${(appState.worker.role || 'OPERARIO DE MONTAJE').toUpperCase()}`;
+      if (dateEl) dateEl.textContent = appState.worker.date;
+      if (scoreEl) scoreEl.textContent = `${appState.percentage}% (${appState.score} / 15)`;
+      
+      if (statusEl) {
+        if (isApproved) {
+          statusEl.textContent = 'HABILITADO EN OBRA';
+          statusEl.style.color = 'var(--tertiary)';
+        } else {
+          statusEl.textContent = 'NO HABILITADO (PENDIENTE REINDUCCIÓN)';
+          statusEl.style.color = 'var(--error)';
+        }
+      }
+
+      if (sigWorkerName) sigWorkerName.textContent = appState.worker.name || 'Trabajador Evaluado';
+      if (sigWorkerDoc) sigWorkerDoc.textContent = `C.C. ${appState.worker.doc}`;
+    }
+
+    /**
+     * Render Accordion Review of All 15 Questions
+     */
+    function renderReviewAccordion() {
+      const container = document.getElementById('review-accordion-list');
+      container.innerHTML = '';
+
+      QUIZ_QUESTIONS.forEach((q, idx) => {
+        const userAns = appState.userAnswers[q.id];
+        const isCorrect = userAns ? userAns.isCorrect : false;
+        const selectedIdx = userAns ? userAns.selectedOptionIndex : -1;
+
+        const item = document.createElement('div');
+        item.className = 'review-accordion-item';
+
+        const header = document.createElement('div');
+        header.className = 'review-accordion-header';
+        header.innerHTML = `
+          <div style="display: flex; align-items: center; gap: var(--space-sm);">
+            <span style="font-family: var(--font-label); font-weight: 700; color: ${isCorrect ? 'var(--tertiary)' : 'var(--error)'};">
+              ${isCorrect ? '✓' : '✗'} P${idx + 1}.
+            </span>
+            <span style="font-size: 0.95rem; color: var(--on-surface);">${q.question.substring(0, 95)}...</span>
+          </div>
+          <span style="font-family: var(--font-label); font-size: 0.75rem; color: var(--on-surface-variant);">
+            [Ver detalle]
+          </span>
+        `;
+
+        const body = document.createElement('div');
+        body.className = 'review-accordion-body';
+        
+        let optionsListHtml = '<div style="margin: var(--space-sm) 0; display: flex; flex-direction: column; gap: 4px;">';
+        q.options.forEach((opt, oIdx) => {
+          let styleClass = '';
+          let badge = '';
+          if (opt.correct) {
+            styleClass = 'color: #0e6027; font-weight: 600;';
+            badge = ' <span style="font-size: 0.7rem; background: #defbe6; padding: 2px 5px; border-radius: 2px;">(Opción Correcta)</span>';
+          }
+          if (oIdx === selectedIdx) {
+            badge += opt.correct 
+              ? ' <span style="font-size: 0.7rem; background: #defbe6; padding: 2px 5px; border-radius: 2px; font-weight: bold;">[Su Selección: Correcta]</span>'
+              : ' <span style="font-size: 0.7rem; background: #fff1f1; color: #a2191f; padding: 2px 5px; border-radius: 2px; font-weight: bold;">[Su Selección: Incorrecta]</span>';
+          }
+          optionsListHtml += `<div style="font-size: 0.88rem; ${styleClass}">• ${opt.text}${badge}</div>`;
+        });
+        optionsListHtml += '</div>';
+
+        body.innerHTML = `
+          <p style="font-weight: 600; margin-bottom: var(--space-xs); font-size: 0.95rem;">${q.question}</p>
+          ${optionsListHtml}
+          <div style="margin-top: var(--space-sm); padding: var(--space-sm); background: var(--surface-container-low); border-radius: var(--rounded); font-size: 0.85rem;">
+            <strong>Fundamento Técnico:</strong> ${q.feedback}<br>
+            <span class="text-mono" style="font-size: 0.75rem; color: var(--on-surface-variant); margin-top: 4px; display: inline-block;">
+              Norma: ${q.normCitation}
+            </span>
+          </div>
+        `;
+
+        header.onclick = () => {
+          body.classList.toggle('open');
+        };
+
+        item.appendChild(header);
+        item.appendChild(body);
+        container.appendChild(item);
+      });
+    }
+
+    /**
+     * Toggle Answers Review Section
+     */
+    function toggleReviewSection() {
+      const section = document.getElementById('review-section');
+      if (section.style.display === 'none' || !section.style.display) {
+        section.style.display = 'block';
+        section.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        section.style.display = 'none';
+      }
+    }
+
+    /**
+     * Print Official Digital Certificate
+     */
+    function handlePrintCertificate() {
+      window.print();
+    }
+
+    /**
+     * Restart Evaluation
+     */
+    function handleRestartEvaluation() {
+      if (confirm("¿Desea reiniciar la evaluación? Se conservarán sus datos de trabajador pero se reiniciará el cuestionario.")) {
+        appState.currentQuestionIndex = 0;
+        appState.userAnswers = {};
+        appState.isExamFinished = false;
+        appState.score = 0;
+        appState.percentage = 0;
+        persistState();
+
+        showScreen('screen-quiz');
+        renderCurrentQuestion();
+      }
+    }
+  </script>
+</body>
+</html>
